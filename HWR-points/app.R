@@ -22,11 +22,11 @@ ui <- navbarPage(
     "Harvard Women's Rugby Point System",
     theme = shinytheme(theme = "united"),
     
-    ### GOOGLE FORM
-
     tabPanel("Leaderboard",
+             imageOutput("team", width = "100%", height = "100%"),
+             br(),
              tabsetPanel(
-                 tabPanel("HWR Fall 202 Leaderboard",
+                 tabPanel("HWR Fall 2020 Leaderboard",
                           sidebarPanel(
                               helpText("Select to compare between:"),
                               span(),
@@ -39,6 +39,15 @@ ui <- navbarPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+    
+    output$team <- renderImage({
+        
+        list(src = 'images/team.jpeg',
+             height = 450,
+             width = 700,
+             style = "display: block; margin-left: auto; margin-right: auto;")},
+        deleteFile = FALSE
+    )
     
     output$points_plot <- renderPlot({if(input$plot1 == "wellbeing"){
         p %>%
