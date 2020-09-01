@@ -18,7 +18,7 @@ p <- read_sheet("https://docs.google.com/spreadsheets/d/10duGZfrecgT0eqAuymkwYiX
 # Define UI for application that draws a histogram
 ui <- navbarPage(
     "Harvard Women's Rugby Point System",
-    theme = shinytheme(theme = "superhero"),
+    theme = shinytheme(theme = "united"),
     
     ### GOOGLE FORM
 
@@ -40,14 +40,25 @@ server <- function(input, output) {
     
     output$points_plot <- renderPlot({if(input$plot1 == "wellbeing"){
         p %>%
-            select(Name, wellbeing) %>%
+            select(Name, wellbeing) %>%filter(! is.na(Name)) %>%
+            arrange(desc(wellbeing)) %>%
             ggplot(aes(x = wellbeing, y = Name, fill = Name)) + geom_col() + 
-            theme_classic()
+            theme_classic() +  
+            labs(title = "HWR 2020 Goal Leaderboard",
+                 subtitle = "Wellbeing Points",
+                 x = "Total Points",
+                 y = "Team Member")
     } else if(input$plot1 == "conditioning"){
         p %>%
             select(Name, conditioning) %>%
+            filter(! is.na(Name)) %>%
+            arrange(desc(conditioning)) %>%
             ggplot(aes(x = conditioning, y = Name, fill = Name)) + geom_col() + 
-            theme_classic()
+            theme_classic() + 
+            labs(title = "HWR 2020 Goal Leaderboard",
+                 subtitle = "Conditioning Points",
+                 x = "Total Points",
+                 y = "Team Member")
     }
     })
 }
