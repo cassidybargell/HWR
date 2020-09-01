@@ -10,42 +10,45 @@
 library(shiny)
 library(tidyverse)
 library(googlesheets4)
+library(shinythemes)
+library(ggthemes)
 
 p <- read_sheet("https://docs.google.com/spreadsheets/d/10duGZfrecgT0eqAuymkwYiXSiLNBLLUAiiQQhriM9TU/edit#gid=549236542")
 
 # Define UI for application that draws a histogram
-ui <- fluidPage(
+ui <- navbarPage(
+    "Harvard Women's Rugby Point System",
+    theme = shinytheme(theme = "superhero"),
+    
+    ### GOOGLE FORM
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
+    tabPanel("Leaderboard",
+             tabsetPanel(
+                 tabPanel("HWR Fall 202 Leaderboard",
+                          sidebarPanel(
+                              helpText("Select to compare between:"),
+                              span(),
+                              selectInput("plot1", "Categories:",
+                                          choices = list("Wellbeing" = "wellbeing",
+                                                         "Conditioning" = "conditioning"),
+                                          selected = "wellbeing")),
+                          mainPanel(plotOutput("points_plot")))))
         )
-    )
-)
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
+    
+    output$points_plot <- renderPlot({if(input$plot1 == "wellbeing"){
+        p %>%
+            select(Name, wellbeing) %>%
+            ggplot(aes(x = wellbeing, y = Name, fill = Name)) + geom_col() + 
+            theme_classic()
+    } else if(input$plot1 == "conditioning"){
+        p %>%
+            select(Name, conditioning) %>%
+            ggplot(aes(x = conditioning, y = Name, fill = Name)) + geom_col() + 
+            theme_classic()
+    }
     })
 }
 
