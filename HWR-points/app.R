@@ -13,7 +13,9 @@ library(googlesheets4)
 library(shinythemes)
 library(ggthemes)
 
-p <- read_sheet("https://docs.google.com/spreadsheets/d/10duGZfrecgT0eqAuymkwYiXSiLNBLLUAiiQQhriM9TU/edit#gid=549236542")
+gs4_deauth()
+
+p <- read_sheet("https://docs.google.com/spreadsheets/d/10duGZfrecgT0eqAuymkwYiXSiLNBLLUAiiQQhriM9TU/edit?usp=sharing")
 
 # Define UI for application that draws a histogram
 ui <- navbarPage(
