@@ -39,19 +39,12 @@ ui <- navbarPage(
                                           selected = "wellbeing")),
                           mainPanel(plotOutput("points_plot"))))),
     
-    tabPanel("Qualitative Entries",
+    tabPanel("Reflection Entries",
              tabsetPanel(
-                 tabPanel("HWR Fall 2020 Refelctions",
-                          sidebarPanel(
-                              helpText("Select to compare between:"),
-                              span(),
-                              selectInput("plot2", "Team Member:",
-                                          choices = list("Cass" = "cass",
-                                                         "Ach" = "ach",
-                                                         "Erica" = "erica",
-                                                         "Bert" = "bert"),
-                                          selected = "cass")),
-                          mainPanel(plotOutput("gt_reflect")))))
+                 tabPanel("Ach",
+                          gt_output(outputId = "gt_ach")),
+                 tabPanel("Cass",
+                          gt_output(outputId = "gt_cass"))))
         )
 
 # Define server logic required to draw a histogram
@@ -123,33 +116,43 @@ server <- function(input, output) {
     }
     })
     
-    output$gt_reflect <- renderPlot({if(input$plot2 == "cass"){
-        p %>%
-            select(Name, positives, negatives, focus) %>% 
-            filter(! is.na(Name)) %>%
-            filter(Name == "Cass") %>%
-            gt()
-    } else if(input$plot2 == "ach"){
-        p %>%
-            select(Name, positives, negatives, focus) %>%
+    output$gt_ach <- render_gt(
+        p %>%select(Name, positives, negatives, focus) %>%
             filter(! is.na(Name)) %>% 
             filter(Name == "Ach") %>%
             gt()
-    } else if(input$plot2 == "Erica"){
-        p %>%
-            select(Name, positives, negatives, focus) %>% 
-            filter(! is.na(Name)) %>%
-            filter(Name == "Erica") %>%
+    )
+    
+    output$gt_cass <- render_gt(
+        p %>%select(Name, positives, negatives, focus) %>%
+            filter(! is.na(Name)) %>% 
+            filter(Name == "Cass") %>%
             gt()
-    } else if(input$plot1 == "bert"){
-        p %>%
-            select(Name, positives, negatives, focus) %>% 
-            filter(! is.na(Name)) %>%
-            filter(Name == "Bert") %>%
-            gt()
+    )
+    
     }
-    })
-}
+
+#     } else if(input$plot2 == "ach"){
+#         p %>%
+#             select(Name, positives, negatives, focus) %>%
+#             filter(! is.na(Name)) %>% 
+#             filter(Name == "Ach") %>%
+#             gt()
+#     } else if(input$plot2 == "Erica"){
+#         p %>%
+#             select(Name, positives, negatives, focus) %>% 
+#             filter(! is.na(Name)) %>%
+#             filter(Name == "Erica") %>%
+#             gt()
+#     } else if(input$plot1 == "bert"){
+#         p %>%
+#             select(Name, positives, negatives, focus) %>% 
+#             filter(! is.na(Name)) %>%
+#             filter(Name == "Bert") %>%
+#             gt()
+#     }
+#     })
+# }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
