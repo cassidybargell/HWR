@@ -117,42 +117,35 @@ server <- function(input, output) {
     })
     
     output$gt_ach <- render_gt(
-        p %>%select(Name, positives, negatives, focus) %>%
+        p %>% select(Name, Timestamp, positives, negatives, focus) %>%
             filter(! is.na(Name)) %>% 
             filter(Name == "Ach") %>%
-            gt()
+            select(Timestamp, positives, negatives, focus) %>%
+            gt() %>%
+            tab_header(title = "Ach Reflections") %>%
+            cols_label(positives = "Positives from today? 
+                       Did you progress towards your personal goals at all?", 
+                       negatives = "Negatives from today?
+                       How might you grow from this?", 
+                       focus = "Focus for tomorrow/the coming days?")
     )
     
     output$gt_cass <- render_gt(
-        p %>%select(Name, positives, negatives, focus) %>%
+        p %>% select(Name, Timestamp, positives, negatives, focus) %>%
             filter(! is.na(Name)) %>% 
             filter(Name == "Cass") %>%
-            gt()
+            select(Timestamp, positives, negatives, focus) %>%
+            gt() %>%
+            tab_header(title = "Cass Reflections") %>%
+            cols_label(positives = "Positives from today? 
+                       Did you progress towards your personal goals at all?", 
+                       negatives = "Negatives from today?
+                       How might you grow from this?", 
+                       focus = "Focus for tomorrow/the coming days?")
     )
     
-    }
+}
 
-#     } else if(input$plot2 == "ach"){
-#         p %>%
-#             select(Name, positives, negatives, focus) %>%
-#             filter(! is.na(Name)) %>% 
-#             filter(Name == "Ach") %>%
-#             gt()
-#     } else if(input$plot2 == "Erica"){
-#         p %>%
-#             select(Name, positives, negatives, focus) %>% 
-#             filter(! is.na(Name)) %>%
-#             filter(Name == "Erica") %>%
-#             gt()
-#     } else if(input$plot1 == "bert"){
-#         p %>%
-#             select(Name, positives, negatives, focus) %>% 
-#             filter(! is.na(Name)) %>%
-#             filter(Name == "Bert") %>%
-#             gt()
-#     }
-#     })
-# }
 
 # Run the application 
 shinyApp(ui = ui, server = server)
