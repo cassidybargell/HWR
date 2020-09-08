@@ -5,8 +5,8 @@ account: cassidy-bargell
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2737105
-bundleId: 3608349
+bundleId: 3608466
 url: https://cassidy-bargell.shinyapps.io/HWR-points/
-when: 1599604577.60933
+when: 1599606952.92409
 asMultiple: FALSE
 asStatic: FALSE
