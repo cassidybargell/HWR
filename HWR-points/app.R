@@ -25,6 +25,8 @@ ui <- navbarPage(
     tabPanel("Point Tracker",
              imageOutput("team", width = "100%", height = "100%"),
              br(),
+             uiOutput("Form"),
+             br(),
              tabsetPanel(
                  tabPanel("HWR Fall 2020 Points System",
                           sidebarPanel(
@@ -100,6 +102,10 @@ server <- function(input, output) {
              style = "display: block; margin-left: auto; margin-right: auto;")},
         deleteFile = FALSE
     )
+        url <- a("HWR Points", href="https://forms.gle/qF6j5fehoiArYVtq9")
+        output$Form <- renderUI({
+            tagList("Form link:", url)
+        })
     
     output$points_plot <- renderPlot({if(input$plot1 == "wellbeing"){
         p %>%
